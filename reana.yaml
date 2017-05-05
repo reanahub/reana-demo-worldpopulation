@@ -1,0 +1,5 @@
+workflow: yadage
+yadage_file: world_population_analysis.yaml
+yadage_toplevel: github:reanahub/reana-demo-worldpopulation
+yadage_nparallel: 1
+yadage_preset_parameters: {}
