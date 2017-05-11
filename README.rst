@@ -69,8 +69,7 @@ For example:
     RUN pip install ipython==5.0.0 jupyter==1.0.0
     ADD world_population_analysis.ipynb /code/
     WORKDIR /code
-    ENTRYPOINT ["jupyter", "nbconvert"]
-    CMD ["world_population_analysis.ipynb"]
+    CMD ["jupyter", "nbconvert","world_population_analysis.ipynb"]
 
 We can now build the container image:
 
@@ -82,7 +81,7 @@ and test whether it works:
 
 .. code-block:: console
 
-    $ docker run -v `pwd`:/code -i -t --rm worldpopulation
+    $ docker run -v `pwd`:/code -i -t --rm worldpopulation jupyter nbconvert world_population_analysis.ipynb
     $ firefox world_population_analysis.html
 
 Let us publish it on Docker Hub:
@@ -133,12 +132,11 @@ For example:
 That's all! Our analysis is now fully prepared in the REANA-compatible
 reproducible manner.
 
-Rerun the analysis
-==================
+Run the example on REANA cloud
+==============================
 
-**FIXME** work-in-progress
-
-We can now install REANA client and submit the analysis to REANA cloud:
+We can now install the REANA client and submit the "world population" analysis
+example to run on some particular REANA cloud instance:
 
 .. code-block:: console
 
@@ -149,10 +147,7 @@ We can now install REANA client and submit the analysis to REANA cloud:
    [...]
    [INFO] Done. You can see the results in the `output/` directory.
 
-Let us visualise the results:
-
-.. code-block:: console
-
-   $ ls -l output/world_population_analysis.html
-   -rw-r--r-- 1 root root 310847 May  5 10:52 world_population_analysis.html
-   $ firefox output/world_population_analysis.html
+**FIXME** The ``reana-client`` package is a not-yet-released work-in-progress.
+Until it is available, you can use ``reana run helloworld`` on the REANA server
+side, following the `REANA getting started
+<http://reana.readthedocs.io/en/latest/gettingstarted.html>`_ documentation.

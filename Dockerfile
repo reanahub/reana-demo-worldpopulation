@@ -7,5 +7,4 @@ RUN yum install -y \
 RUN pip install ipython==5.0.0 jupyter==1.0.0
 ADD world_population_analysis.ipynb /code/
 WORKDIR /code
-ENTRYPOINT ["jupyter", "nbconvert"]
-CMD ["world_population_analysis.ipynb"]
+CMD ["jupyter", "nbconvert","world_population_analysis.ipynb"]
