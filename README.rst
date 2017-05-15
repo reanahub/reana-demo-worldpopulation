@@ -52,15 +52,15 @@ The resulting plots can be obtained as follows:
 3. Compute environment
 ======================
 
-Let us assume that we were using CentOS7 operating system and IPython 5.0 to run
-the above analysis on our laptop. In order to be able to rerun the analysis with
-the same version of Jupyter notebook software even several years in the future,
-we need to "encapsulate the current environment" where the original analysis
-code run.
+Let us assume that we were using CentOS7 operating system and Jupyter Notebook
+1.0 with IPython 5.0 kernel to run the above analysis on our laptop. In order to
+be able to rerun the analysis with the same version of Jupyter notebook software
+even several years in the future, we need to "encapsulate the current
+environment" where the original analysis code run.
 
 In our example, we shall achieve this by preparing a `Docker
 <https://www.docker.com/>`_ container emulating CentOS7 with instructions on how
-to install the wanted Ipython and Jupyter versions:
+to install the wanted Jupyter notebook and IPython kernel versions:
 
 - `Dockerfile <Dockerfile>`_
 
@@ -103,7 +103,7 @@ Let us publish it on Docker Hub:
 =================
 
 This analysis is very simple because it consisted basically of running a single
-step that converted the IPython Notebook to an HTML file:
+step that converted the Jupyter notebook to an HTML file:
 
 .. code-block:: console
 
