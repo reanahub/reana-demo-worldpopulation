@@ -21,7 +21,7 @@ reusable research data analysis plaftorm.
 Making a research data analysis reproducible means to provide "runnable recipes"
 addressing (1) where the input datasets are, (2) what software was used to
 analyse the data, (3) which computing environment was used to run the software,
-and (4) which workflow steps was taken to run the analysis.
+and (4) which workflow steps were taken to run the analysis.
 
 1. Input dataset
 ================
@@ -99,11 +99,11 @@ Let us publish it on Docker Hub:
 
     $ docker push johndoe/worldpopulation
 
-4. Workflow steps
-=================
+4. Analysis workflow
+====================
 
-This analysis is very simple because it consisted basically of running a single
-step that converted the Jupyter notebook to an HTML file:
+This analysis is very simple because it consists basically of running a single
+step that converts the Jupyter notebook to an HTML file:
 
 .. code-block:: console
 
@@ -138,8 +138,9 @@ For example:
              environment_type: 'docker-encapsulated'
              image: 'johndoe/worldpopulation'
 
-That's all! Our analysis is now fully prepared in the REANA-compatible
-reproducible manner.
+That's all! Our "world population" analysis is now fully described in the
+REANA-compatible reusable analysis manner and is prepared to be run on the REANA
+cloud.
 
 Run the example on REANA cloud
 ==============================
@@ -157,6 +158,7 @@ example to run on some particular REANA cloud instance:
    [INFO] Done. You can see the results in the `output/` directory.
 
 **FIXME** The ``reana-client`` package is a not-yet-released work-in-progress.
-Until it is available, you can use ``reana run helloworld`` on the REANA server
-side, following the `REANA getting started
+Until it is available, you can use ``reana run
+reanahub/reana-demo-worldpopulation`` on the REANA server side, following the
+`REANA getting started
 <http://reana.readthedocs.io/en/latest/gettingstarted.html>`_ documentation.
