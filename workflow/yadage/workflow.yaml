@@ -1,18 +1,20 @@
 stages:
   - name: worldpopulation
+    dependencies: [init]
     scheduler:
       scheduler_type: 'singlestep-stage'
       parameters:
+        notebook: {stages: init, output: notebook, unwrap: true}
         outputdir: '{workdir}'
         outputfile: '{workdir}/world_population_analysis.html'
       step:
         process:
           process_type: 'string-interpolated-cmd'
-          cmd: 'jupyter nbconvert --output-dir="{outputdir}" world_population_analysis.ipynb'
+          cmd: 'jupyter nbconvert --output-dir="{outputdir}" "{notebook}"'
         publisher:
           publisher_type: 'frompar-pub'
           outputmap:
             outputfile: outputfile
         environment:
           environment_type: 'docker-encapsulated'
-          image: 'reanahub/reana-demo-worldpopulation'
+          image: 'reanahub/reana-env-jupyter'

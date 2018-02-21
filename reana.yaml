@@ -1,5 +1,26 @@
-workflow: yadage
-yadage_file: world_population_analysis.yaml
-yadage_toplevel: github:reanahub/reana-demo-worldpopulation
-yadage_nparallel: 1
-yadage_preset_parameters: {}
+version: 0.1.0
+metadata:
+  authors:
+   - Alizee Pace <alizee.pace@gmail.com>
+   - Diego Rodriguez <diego.rodriguez@cern.ch>
+   - Tibor Simko <tibor.simko@cern.ch>
+  title: World population - a Jupyter notebook reusable analysis example
+  date: 21 February 2018
+  repository: https://github.com/reanahub/reana-demo-worldpopulation/
+code:
+  files:
+   - code/world_population_analysis.ipynb
+inputs:
+  files:
+    - inputs/World_historical_and_predicted_populations_in_percentage.csv
+  parameters:
+    notebook: code/world_population_analysis.ipynb
+outputs:
+  files:
+   - outputs/world_population_analysis.html
+environments:
+  - type: docker
+    image: reanahub/reana-env-jupyter
+workflow:
+  type: yadage
+  file: workflow/yadage/workflow.yaml
