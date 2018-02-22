@@ -77,36 +77,16 @@ environment "as is" and simply mount our notebook for execution.
 ====================
 
 This analysis is very simple because it consists basically of running a single
-step that converts the Jupyter notebook to an HTML file. Nevertheless let us
-demonstrate on how could one use the `Yadage
-<https://github.com/diana-hep/yadage>`_ workflow engine to express this in a
-structured YAML format:
+step that converts the Jupyter notebook to an HTML file. Nevertheless we demonstrate
+how one could use the `Yadage
+<https://github.com/diana-hep/yadage>`_ workflow engine and `Common Workflow Language
+<http://www.commonwl.org/v1.0/>`_ specification to express this in a
+structured YAML format. The corresponding
+workflow descriptions can be found under  ``workflow/yadage/workflow.yaml`` and
+``workflow/cwl/world_population_analysis.cwl`` paths.
 
-- `workflow.yaml <workflow/yadage/workflow.yaml>`_
 
-.. code-block:: yaml
-
-    stages:
-      - name: worldpopulation
-        scheduler:
-          scheduler_type: 'singlestep-stage'
-          parameters:
-            notebook: '{stages: init, output: notebook, unwrap: true}'
-            outputdir: '{workdir}'
-            outputfile: '{workdir}/world_population_analysis.html'
-          step:
-            process:
-              process_type: 'string-interpolated-cmd'
-              cmd: 'jupyter nbconvert --output-dir="{outputdir}" {notebook}'
-            publisher:
-              publisher_type: 'frompar-pub'
-              outputmap:
-                outputfile: outputfile
-            environment:
-              environment_type: 'docker-encapsulated'
-              image: 'reanahub/reana-env-jupyter'
-
-That's all! Our "world population" analysis is now fully described in the
+Now our "world population" analysis is now fully described in the
 REANA-compatible reusable analysis manner and is prepared to be run on the REANA
 cloud.
 
@@ -137,7 +117,7 @@ Let us check the results:
 Local testing with Yadage
 =========================
 
-Let us test whether the Yadage workflow engine execution works locally as well.
+Let us test whether the Yadage workflow engine execution works locally.
 
 Since Yadage only accepts one input directory as parameter, we are going to
 create a wrapper directory which will contain links to ``inputs`` and ``code``
@@ -183,6 +163,65 @@ Let us check the results:
 
     $ firefox worldpopulation/world_population_analysis.html
 
+Local testing with CWL
+=========================
+
+Let us test whether the CWL workflow execution works locally as well.
+
+To prepare the execution, we can:
+
+- either place input files ``code/world_population_analysis.ipynb`` into the directory with ``world_population_analysis_job.yml``
+
+.. code-block:: console
+
+
+    $ cp code/world_population_analysis.ipynb workflow/cwl/
+
+
+- or place ``world_population_analysis_job.yml`` to the root of the repository and edit it to correctly point to the input files:
+
+
+.. code-block:: console
+   :emphasize-lines: 6
+
+    $ cp workflow/cwl/world_population_analysis_job.yml .
+    $ vim world_population_analysis_job.yml
+
+    notebook:
+      class: File
+      path: code/world_population_analysis.ipynb
+
+
+We can now run the corresponding commands locally as follows:
+
+.. code-block:: console
+
+   // use this command, if input files were copied
+   $ cwltool --quiet --outdir="outputs" workflow/cwl/helloworld.cwl workflow/cwl/world_population_analysis_job.yml
+
+   // or use this command, if helloworld-job.yml was edited
+   $ cwltool --quiet --outdir="outputs" workflow/cwl/helloworld.cwl world_population_analysis_job.yml
+
+    [NbConvertApp] Converting notebook /var/lib/cwl/stgccd9de94-1340-41ee-b65b-39b0d826efa3/world_population_analysis.ipynb to html
+    [NbConvertApp] Writing 309515 bytes to tmp/world_population_analysis.html
+    {
+        "analysis": {
+            "checksum": "sha1$19ac7a33cedcfade5d561379830a9f64d2c5a780",
+            "basename": "world_population_analysis.html",
+            "location": "file:///path/to/reana-demo-worldpopulation/outputs/world_population_analysis.html",
+            "path": "/path/to/reana-demo-worldpopulation/outputs/world_population_analysis.html",
+            "class": "File",
+            "size": 309515
+        }
+    }
+
+
+Let us check the results:
+
+.. code-block:: console
+
+   $ firefox outputs/world_population_analysis.html
+
 Create REANA file
 =================
 
@@ -218,6 +257,8 @@ means of the following REANA specification file:
     workflow:
       type: yadage
       file: workflow/yadage/workflow.yaml
+
+For CWL version see ``reana-cwl.yaml``
 
 Run the example on REANA cloud
 ==============================
@@ -314,6 +355,9 @@ Let us verify the result:
 .. code-block:: console
 
     $ firefox outputs/worldpopulation/world_population_analysis.html
+
+This example uses Yadage workflow engine. If you would like to use CWL workflow engine,
+please just use ``-f reana-cwl.yaml`` with reana-client commands
 
 Thank you for using the `REANA <http://reanahub.io/>`_ reusable analysis
 platform.

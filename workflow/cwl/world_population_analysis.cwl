@@ -4,19 +4,17 @@ cwlVersion: v1.0
 class: Workflow
 
 inputs:
-  outputfilename:
-    type: string
+  notebook: File
 
 outputs:
   analysis:
     type: File
     outputSource:
-      worldpopulation/outputfile
-
+      worldpopulation/result
 
 steps:
   worldpopulation:
     run: worldpopulation.tool
     in:
-      outputfilename: outputfilename
-    out: [outputfile]
+      notebook: notebook
+    out: [result]
