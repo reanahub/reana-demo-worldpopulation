@@ -51,7 +51,7 @@ The resulting plots can be obtained as follows:
 
 This generates a plot representing the result of our analysis:
 
-.. figure:: https://raw.githubusercontent.com/reanahub/reana-demo-root6-roofit/master/docs/plot.png
+.. figure:: https://raw.githubusercontent.com/reanahub/reana-demo-worldpopulation/master/docs/plot.png
    :alt: plot.png
    :align: center
 
