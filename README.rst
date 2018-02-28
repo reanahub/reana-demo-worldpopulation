@@ -168,39 +168,20 @@ Local testing with CWL
 
 Let us test whether the CWL workflow execution works locally as well.
 
-To prepare the execution, we can:
-
-- either place input files ``code/world_population_analysis.ipynb`` into the directory with ``world_population_analysis_job.yml``
-
-.. code-block:: console
-
-
-    $ cp code/world_population_analysis.ipynb workflow/cwl/
-
-
-- or place ``world_population_analysis_job.yml`` to the root of the repository and edit it to correctly point to the input files:
-
+To prepare the execution, we are creating a working directory called ``cwl-local-run`` which will contain both
+``inputs`` and ``code`` directory content. Also, we need to copy the workflow input file:
 
 .. code-block:: console
-   :emphasize-lines: 6
 
-    $ cp workflow/cwl/world_population_analysis_job.yml .
-    $ vim world_population_analysis_job.yml
-
-    notebook:
-      class: File
-      path: code/world_population_analysis.ipynb
-
+   $ mkdir cwl-local-run
+   $ cd cwl-local-run
+   $ cp ../code/* ../inputs/* ../workflow/cwl/world_population_analysis_job.yml .
 
 We can now run the corresponding commands locally as follows:
 
 .. code-block:: console
 
-   // use this command, if input files were copied
-   $ cwltool --quiet --outdir="outputs" workflow/cwl/helloworld.cwl workflow/cwl/world_population_analysis_job.yml
-
-   // or use this command, if helloworld-job.yml was edited
-   $ cwltool --quiet --outdir="outputs" workflow/cwl/helloworld.cwl world_population_analysis_job.yml
+   $ cwltool --quiet --outdir="../outputs" ../workflow/cwl/world_population_analysis.cwl world_population_analysis_job.yml
 
     [NbConvertApp] Converting notebook /var/lib/cwl/stgccd9de94-1340-41ee-b65b-39b0d826efa3/world_population_analysis.ipynb to html
     [NbConvertApp] Writing 309515 bytes to tmp/world_population_analysis.html
