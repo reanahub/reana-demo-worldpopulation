@@ -77,14 +77,15 @@ environment "as is" and simply mount our notebook for execution.
 ====================
 
 This analysis is very simple because it consists basically of running a single
-step that converts the Jupyter notebook to an HTML file. Nevertheless we demonstrate
-how one could use the `Yadage
-<https://github.com/diana-hep/yadage>`_ workflow engine and `Common Workflow Language
-<http://www.commonwl.org/v1.0/>`_ specification to express this in a
-structured YAML format. The corresponding
-workflow descriptions can be found under  ``workflow/yadage/workflow.yaml`` and
-``workflow/cwl/world_population_analysis.cwl`` paths.
+step that converts the Jupyter notebook to an HTML file. Nevertheless we
+demonstrate how one could use the `Yadage
+<https://github.com/diana-hep/yadage>`_ workflow engine and `Common Workflow
+Language <http://www.commonwl.org/v1.0/>`_ specification to express this in a
+structured YAML format. The corresponding workflow descriptions can be found
+here:
 
+- `Yadage workflow definition <workflow/yadage/workflow.yaml>`_
+- `CWL workflow definition <workflow/cwl/world_population_analysis.cwl>`_
 
 Now our "world population" analysis is now fully described in the
 REANA-compatible reusable analysis manner and is prepared to be run on the REANA
@@ -164,7 +165,7 @@ Let us check the results:
     $ firefox worldpopulation/world_population_analysis.html
 
 Local testing with CWL
-=========================
+======================
 
 Let us test whether the CWL workflow execution works locally as well.
 
@@ -212,18 +213,18 @@ means of the following REANA specification file:
 
 .. code-block:: yaml
 
-    version: 0.1.0
+    version: 0.2.0
     metadata:
       authors:
-      - Alizee Pace <alizee.pace@gmail.com>
-      - Diego Rodriguez <diego.rodriguez@cern.ch>
-      - Tibor Simko <tibor.simko@cern.ch>
+       - Alizee Pace <alizee.pace@gmail.com>
+       - Diego Rodriguez <diego.rodriguez@cern.ch>
+       - Tibor Simko <tibor.simko@cern.ch>
       title: World population - a Jupyter notebook reusable analysis example
       date: 21 February 2018
       repository: https://github.com/reanahub/reana-demo-worldpopulation/
     code:
       files:
-      - code/world_population_analysis.ipynb
+       - code/world_population_analysis.ipynb
     inputs:
       files:
         - inputs/World_historical_and_predicted_populations_in_percentage.csv
@@ -231,7 +232,7 @@ means of the following REANA specification file:
         notebook: code/world_population_analysis.ipynb
     outputs:
       files:
-      - outputs/world_population_analysis.html
+       - outputs/world_population_analysis.html
     environments:
       - type: docker
         image: reanahub/reana-env-jupyter
@@ -239,7 +240,7 @@ means of the following REANA specification file:
       type: yadage
       file: workflow/yadage/workflow.yaml
 
-For CWL version see ``reana-cwl.yaml``
+For CWL version see ``reana-cwl.yaml``.
 
 Run the example on REANA cloud
 ==============================
@@ -258,10 +259,19 @@ and connect to the REANA cloud instance where we will run this example:
 .. code-block:: console
 
     $ export REANA_SERVER_URL=http://192.168.99.100:32658
-    $ reana-client ping
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Connecting to http://192.168.99.100:32658
-    [INFO] Server is running.
+
+If you run REANA cluster locally as well, then:
+
+.. code-block:: console
+
+   $ eval $(reana-cluster env)
+
+Let us check the connection:
+
+.. code-block:: console
+
+   $ reana-client ping
+   Server is running.
 
 We can now initialise workflow and upload our input CSV data file and our
 Jupyter notebook:
@@ -269,66 +279,40 @@ Jupyter notebook:
 .. code-block:: console
 
     $ reana-client workflow create
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Validating REANA specification file: /home/simko/private/src/reana-demo-worldpopulation/reana.yaml
-    [INFO] Connecting to http://192.168.99.100:32658
-    {u'message': u'Workflow workspace created', u'workflow_id': u'e4ec8128-a815-4bdd-b63c-faa26def77ae'}
-    $ export REANA_WORKON=e4ec8128-a815-4bdd-b63c-faa26def77ae
-    $ reana-client inputs upload World_historical_and_predicted_populations_in_percentage.csv
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Workflow "e4ec8128-a815-4bdd-b63c-faa26def77ae" selected
-    Uploading ./inputs/World_historical_and_predicted_populations_in_percentage.csv ...
-    File ./inputs/World_historical_and_predicted_populations_in_percentage.csv was successfully uploaded.
-    $ reana-client code upload world_population_analysis.ipynb
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Workflow "e4ec8128-a815-4bdd-b63c-faa26def77ae" selected
-    Uploading ./code/world_population_analysis.ipynb ...
-    File ./code/world_population_analysis.ipynb was successfully uploaded.
+    workflow.3
+    $ export REANA_WORKON=workflow.3
+    $ reana-client inputs upload ./inputs
+    File /home/simko/private/project/reana/src/reana-demo-worldpopulation/inputs was successfully uploaded.
+    $ reana-client code upload ./code
+    /home/simko/private/project/reana/src/reana-demo-worldpopulation/code/world_population_analysis.ipynb was uploaded successfully.
     $ reana-client inputs list
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    Name                                                        |Size|Last-Modified
-    ------------------------------------------------------------|----|--------------------------------
-    World_historical_and_predicted_populations_in_percentage.csv|574 |2018-02-21 18:42:17.466009+00:00
+    NAME                                                           SIZE   LAST-MODIFIED
+    World_historical_and_predicted_populations_in_percentage.csv   574    2018-04-20 15:17:44.732120+00:00
     $ reana-client code list
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    Name                           |Size |Last-Modified
-    -------------------------------|-----|--------------------------------
-    world_population_analysis.ipynb|49847|2018-02-21 18:42:40.289009+00:00
+    NAME                              SIZE    LAST-MODIFIED
+    world_population_analysis.ipynb   49847   2018-04-20 15:17:29.749120+00:00
 
 Start workflow execution and enquire about its running status:
 
 .. code-block:: console
 
     $ reana-client workflow start
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Workflow `e4ec8128-a815-4bdd-b63c-faa26def77ae` selected
-    Workflow `e4ec8128-a815-4bdd-b63c-faa26def77ae` has been started.
-    [INFO] Connecting to http://192.168.99.100:32658
-    {u'status': u'running', u'organization': u'default', u'message': u'Workflow successfully launched', u'user': u'00000000-0000-0000-0000-000000000000', u'workflow_id': u'e4ec8128-a815-4bdd-b63c-faa26def77ae'}
-    Workflow `e4ec8128-a815-4bdd-b63c-faa26def77ae` has been started.
+    workflow.3 has been started.
     $ reana-client workflow status
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Workflow "e4ec8128-a815-4bdd-b63c-faa26def77ae" selected
-    Name            |UUID                                |User                                |Organization|Status
-    ----------------|------------------------------------|------------------------------------|------------|-------
-    romantic_babbage|e4ec8128-a815-4bdd-b63c-faa26def77ae|00000000-0000-0000-0000-000000000000|default     |running
+    NAME       RUN_NUMBER   ID                                     USER                                   ORGANIZATION   STATUS
+    workflow   3            c4998157-bdfe-4c4f-86f8-e5d2ad3ea003   00000000-0000-0000-0000-000000000000   default        running
 
 After the workflow execution successfully finished, we can retrieve its output:
 
 .. code-block:: console
 
     $ reana-client outputs list
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] Workflow "e4ec8128-a815-4bdd-b63c-faa26def77ae" selected
-    Name                                          |Size  |Last-Modified
-    ----------------------------------------------|------|--------------------------------
-    worldpopulation/world_population_analysis.html|309515|2018-02-21 19:59:25.342521+00:00
-    _yadage/yadage_snapshot_backend.json          |476   |2018-02-21 19:59:25.342521+00:00
-    _yadage/yadage_snapshot_workflow.json         |6676  |2018-02-21 19:59:25.342521+00:00
-    _yadage/yadage_template.json                  |855   |2018-02-21 19:59:25.342521+00:00
+    NAME                                             SIZE     LAST-MODIFIED
+    worldpopulation/world_population_analysis.html   309515   2018-04-20 15:18:42.103120+00:00
+    _yadage/yadage_snapshot_backend.json             476      2018-04-20 15:18:42.103120+00:00
+    _yadage/yadage_snapshot_workflow.json            8471     2018-04-20 15:18:42.103120+00:00
+    _yadage/yadage_template.json                     872      2018-04-20 15:18:42.103120+00:00
     $ reana-client outputs download worldpopulation/world_population_analysis.html
-    [INFO] REANA Server URL ($REANA_SERVER_URL) is: http://192.168.99.100:32658
-    [INFO] worldpopulation/world_population_analysis.html binary file downloaded ... writing to ./outputs/
     File worldpopulation/world_population_analysis.html downloaded to ./outputs/
 
 Let us verify the result:
@@ -337,8 +321,9 @@ Let us verify the result:
 
     $ firefox outputs/worldpopulation/world_population_analysis.html
 
-This example uses Yadage workflow engine. If you would like to use CWL workflow engine,
-please just use ``-f reana-cwl.yaml`` with reana-client commands
+Note that this example demonstrated the use of the Yadage workflow engine. If
+you would like to use the CWL workflow engine, please just use ``-f
+reana-cwl.yaml`` option with the ``reana-client`` commands.
 
 Thank you for using the `REANA <http://reanahub.io/>`_ reusable analysis
 platform.
