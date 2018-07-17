@@ -1,0 +1,10 @@
+notebook:
+  class: File
+  path: code/worldpopulation.ipynb
+input_file:
+  class: File
+  path: inputs/World_historical_and_predicted_populations_in_percentage.csv
+output_file: plot.png
+region: Africa
+year_min: 1500
+year_max: 2012

@@ -38,7 +38,7 @@ was compiled from `Wikipedia <https://en.wikipedia.org/wiki/World_population>`_.
 
 We have developed a simple Jupyter notebook for illustration:
 
-- `world_population_analysis.ipynb <code/world_population_analysis.ipynb>`_
+- `worldpopulation.ipynb <code/worldpopulation.ipynb>`_
 
 It studies the input dataset and prints several figures about how the world
 population evolved in various continents as a function of time.
@@ -47,13 +47,30 @@ The resulting plots can be obtained as follows:
 
 .. code-block:: console
 
-   $ jupyter nbconvert world_population_analysis.ipynb
+   $ papermill ./code/worldpopulation.ipynb /dev/null \
+         -p input_file ./inputs/World_historical_and_predicted_populations_in_percentage.csv \
+         -p output_file ./outputs/plot.png
+   $ ls -l outputs/plot.png
 
 This generates a plot representing the result of our analysis:
 
 .. figure:: https://raw.githubusercontent.com/reanahub/reana-demo-worldpopulation/master/docs/plot.png
    :alt: plot.png
    :align: center
+
+Note that if you would like to plot different region and different year range,
+you can pass ``region``, ``year_min`` and ``year_max`` parameters via the ``-p``
+command line option:
+
+.. code-block:: console
+
+   $ papermill ./code/worldpopulation.ipynb /dev/null \
+         -p input_file ./inputs/World_historical_and_predicted_populations_in_percentage.csv \
+         -p output_file ./outputs/plot.png \
+         -p region Europe \
+         -p year_min 1600 \
+         -p year_max 2010
+   $ ls -l outputs/plot.png
 
 Let us now try to provide runnable recipes so that our analysis can be run in a
 reproducible manner on the REANA cloud.
@@ -85,7 +102,7 @@ structured YAML format. The corresponding workflow descriptions can be found
 here:
 
 - `Yadage workflow definition <workflow/yadage/workflow.yaml>`_
-- `CWL workflow definition <workflow/cwl/world_population_analysis.cwl>`_
+- `CWL workflow definition <workflow/cwl/worldpopulation.cwl>`_
 
 Now our "world population" analysis is now fully described in the
 REANA-compatible reusable analysis manner and is prepared to be run on the REANA
@@ -107,13 +124,13 @@ environment:
                   -v `pwd`/inputs:/inputs \
                   -v `pwd`/outputs:/outputs \
                   reanahub/reana-env-jupyter \
-              jupyter nbconvert --output-dir=/outputs /code/world_population_analysis.ipynb
+              papermill /code/worldpopulation.ipynb /dev/null
 
 Let us check the results:
 
 .. code-block:: console
 
-    $ firefox outputs/world_population_analysis.html
+    $ firefox outputs/plot.png
 
 Local testing with Yadage
 =========================
@@ -135,34 +152,18 @@ We can now run Yadage locally as follows:
 .. code-block:: console
 
    $ yadage-run . ../workflow/yadage/workflow.yaml \
-         -p notebook=code/world_population_analysis.ipynb \
+         -p notebook=code/worldpopulation.ipynb \
+         -p input_file=inputs/World_historical_and_predicted_populations_in_percentage.csv \
+         -p region=Africa \
+         -p year_min=1500 \
+         -p year_max=2012 \
          -d initdir=`pwd`/yadage-inputs
-   2018-02-21 18:44:05,000 - yadage.utils - INFO - setting up backend multiproc:auto with opts {}
-   2018-02-21 18:44:05,001 - packtivity.asyncbackends - INFO - configured pool size to 4
-   2018-02-21 18:44:05,010 - yadage.utils - INFO - local:. {u'initdir': '/home/simko/private/src/reana-demo-worldpopulation/yadage-local-run/yadage-inputs'}
-   2018-02-21 18:44:05,035 - yadage.steering_object - INFO - initializing workflow with {u'notebook': 'code/world_population_analysis.ipynb'}
-   2018-02-21 18:44:05,035 - adage.pollingexec - INFO - preparing adage coroutine.
-   2018-02-21 18:44:05,035 - adage - INFO - starting state loop.
-   2018-02-21 18:44:05,056 - yadage.handlers.scheduler_handlers - INFO - initializing scope from dependent tasks
-   2018-02-21 18:44:05,063 - yadage.wflowview - INFO - added node <YadageNode init DEFINED lifetime: 0:00:00.000171  runtime: None (id: 0a54ccbef0a08998a549714f0398694034e1aa46) has result: True>
-   2018-02-21 18:44:05,151 - yadage.wflowview - INFO - added node <YadageNode worldpopulation DEFINED lifetime: 0:00:00.000113  runtime: None (id: 28955f1e1213d34e272724ccd6d80f9be9cba829) has result: True>
-   2018-02-21 18:44:05,205 - packtivity_logger_init.step - INFO - publishing data: <TypedLeafs: {u'notebook': u'/home/simko/private/src/reana-demo-worldpopulation/yadage-local-run/yadage-inputs/code/world_population_analysis.ipynb'}>
-   2018-02-21 18:44:05,233 - adage.node - INFO - node ready <YadageNode init SUCCESS lifetime: 0:00:00.170554  runtime: 0:00:00.027437 (id: 0a54ccbef0a08998a549714f0398694034e1aa46) has result: True>
-   2018-02-21 18:44:05,249 - packtivity_logger_worldpopulation.step - INFO - starting file loging for topic: step
-   2018-02-21 18:44:05,310 - packtivity_logger_worldpopulation.step - INFO - prepare pull
-   2018-02-21 18:44:10,519 - adage.node - INFO - node ready <YadageNode worldpopulation SUCCESS lifetime: 0:00:05.367455  runtime: 0:00:05.271024 (id: 28955f1e1213d34e272724ccd6d80f9be9cba829) has result: True>
-   2018-02-21 18:44:10,526 - adage.controllerutils - INFO - no nodes can be run anymore and no rules are applicable
-   2018-02-21 18:44:10,526 - adage.pollingexec - INFO - exiting main polling coroutine
-   2018-02-21 18:44:10,526 - adage - INFO - adage state loop done.
-   2018-02-21 18:44:10,526 - adage - INFO - execution valid. (in terms of execution order)
-   2018-02-21 18:44:10,533 - adage.controllerutils - INFO - no nodes can be run anymore and no rules are applicable
-   2018-02-21 18:44:10,533 - adage - INFO - workflow completed successfully.
 
 Let us check the results:
 
 .. code-block:: console
 
-    $ firefox worldpopulation/world_population_analysis.html
+    $ ls -l worldpopulation/plot.png
 
 Local testing with CWL
 ======================
@@ -176,33 +177,19 @@ To prepare the execution, we are creating a working directory called ``cwl-local
 
    $ mkdir cwl-local-run
    $ cd cwl-local-run
-   $ cp ../code/* ../inputs/* ../workflow/cwl/world_population_analysis_job.yml .
+   $ cp -a ../code ../inputs ../workflow/cwl/worldpopulation_job.yml .
 
 We can now run the corresponding commands locally as follows:
 
 .. code-block:: console
 
-   $ cwltool --quiet --outdir="../outputs" ../workflow/cwl/world_population_analysis.cwl world_population_analysis_job.yml
-
-    [NbConvertApp] Converting notebook /var/lib/cwl/stgccd9de94-1340-41ee-b65b-39b0d826efa3/world_population_analysis.ipynb to html
-    [NbConvertApp] Writing 309515 bytes to tmp/world_population_analysis.html
-    {
-        "analysis": {
-            "checksum": "sha1$19ac7a33cedcfade5d561379830a9f64d2c5a780",
-            "basename": "world_population_analysis.html",
-            "location": "file:///path/to/reana-demo-worldpopulation/outputs/world_population_analysis.html",
-            "path": "/path/to/reana-demo-worldpopulation/outputs/world_population_analysis.html",
-            "class": "File",
-            "size": 309515
-        }
-    }
-
+   $ cwltool --quiet --outdir="../outputs" ../workflow/cwl/worldpopulation.cwl worldpopulation_job.yml
 
 Let us check the results:
 
 .. code-block:: console
 
-   $ firefox outputs/world_population_analysis.html
+   $ ls -l ../outputs/plot.png
 
 Create REANA file
 =================
@@ -224,15 +211,15 @@ means of the following REANA specification file:
       repository: https://github.com/reanahub/reana-demo-worldpopulation/
     code:
       files:
-       - code/world_population_analysis.ipynb
+       - code/worldpopulation.ipynb
     inputs:
       files:
         - inputs/World_historical_and_predicted_populations_in_percentage.csv
       parameters:
-        notebook: code/world_population_analysis.ipynb
+        notebook: code/worldpopulation.ipynb
     outputs:
       files:
-       - outputs/world_population_analysis.html
+       - outputs/plot.png
     environments:
       - type: docker
         image: reanahub/reana-env-jupyter
@@ -284,42 +271,31 @@ Jupyter notebook:
     $ reana-client inputs upload ./inputs
     File /home/simko/private/project/reana/src/reana-demo-worldpopulation/inputs was successfully uploaded.
     $ reana-client code upload ./code
-    /home/simko/private/project/reana/src/reana-demo-worldpopulation/code/world_population_analysis.ipynb was uploaded successfully.
+    /home/simko/private/project/reana/src/reana-demo-worldpopulation/code/worldpopulation.ipynb was uploaded successfully.
     $ reana-client inputs list
     NAME                                                           SIZE   LAST-MODIFIED
     World_historical_and_predicted_populations_in_percentage.csv   574    2018-04-20 15:17:44.732120+00:00
     $ reana-client code list
-    NAME                              SIZE    LAST-MODIFIED
-    world_population_analysis.ipynb   49847   2018-04-20 15:17:29.749120+00:00
 
 Start workflow execution and enquire about its running status:
 
 .. code-block:: console
 
     $ reana-client workflow start
-    workflow.3 has been started.
     $ reana-client workflow status
-    NAME       RUN_NUMBER   ID                                     USER                                   ORGANIZATION   STATUS
-    workflow   3            c4998157-bdfe-4c4f-86f8-e5d2ad3ea003   00000000-0000-0000-0000-000000000000   default        running
 
 After the workflow execution successfully finished, we can retrieve its output:
 
 .. code-block:: console
 
     $ reana-client outputs list
-    NAME                                             SIZE     LAST-MODIFIED
-    worldpopulation/world_population_analysis.html   309515   2018-04-20 15:18:42.103120+00:00
-    _yadage/yadage_snapshot_backend.json             476      2018-04-20 15:18:42.103120+00:00
-    _yadage/yadage_snapshot_workflow.json            8471     2018-04-20 15:18:42.103120+00:00
-    _yadage/yadage_template.json                     872      2018-04-20 15:18:42.103120+00:00
-    $ reana-client outputs download worldpopulation/world_population_analysis.html
-    File worldpopulation/world_population_analysis.html downloaded to ./outputs/
+    $ reana-client outputs download outputs/plot.png
 
 Let us verify the result:
 
 .. code-block:: console
 
-    $ firefox outputs/worldpopulation/world_population_analysis.html
+    $ display outputs/plot.png
 
 Note that this example demonstrated the use of the Yadage workflow engine. If
 you would like to use the CWL workflow engine, please just use ``-f

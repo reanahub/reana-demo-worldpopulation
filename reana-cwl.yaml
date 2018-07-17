@@ -1,27 +1,18 @@
 version: 0.2.0
-metadata:
-  authors:
-   - Alizee Pace <alizee.pace@gmail.com>
-   - Anton Khodak <anton.khodak@ukr.net>
-   - Diego Rodriguez <diego.rodriguez@cern.ch>
-   - Tibor Simko <tibor.simko@cern.ch>
-  title: World population - a Jupyter notebook reusable analysis example
-  date: 21 February 2018
-  repository: https://github.com/reanahub/reana-demo-worldpopulation/
 code:
   files:
-   - code/world_population_analysis.ipynb
+   - code/worldpopulation.ipynb
 inputs:
   files:
     - inputs/World_historical_and_predicted_populations_in_percentage.csv
   parameters:
-    input: workflow/cwl/world_population_analysis_job.yml
+    input: workflow/cwl/worldpopulation_job.yml
 outputs:
   files:
-   - outputs/world_population_analysis.html
+   - outputs/worldpopulation.html
 environments:
   - type: docker
     image: reanahub/reana-env-jupyter
 workflow:
   type: cwl
-  file: workflow/cwl/world_population_analysis.cwl
+  file: workflow/cwl/worldpopulation.cwl

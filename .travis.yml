@@ -19,5 +19,5 @@ before_install:
 
 script:
   - yadage-validate workflow/yadage/workflow.yaml | grep -q 'workflow validates'
-  - docker run -i -t --rm -v `pwd`/code:/code -v `pwd`/inputs:/inputs -v `pwd`/outputs:/outputs reanahub/reana-env-jupyter jupyter nbconvert --output-dir=/outputs /code/world_population_analysis.ipynb
-  - ls -l outputs/world_population_analysis.html
+  - docker run -i -t --rm -v `pwd`/code:/code -v `pwd`/inputs:/inputs -v `pwd`/outputs:/outputs reanahub/reana-env-jupyter papermill /code/worldpopulation.ipynb /dev/null
+  - ls -l `pwd`/outputs/plot.png
