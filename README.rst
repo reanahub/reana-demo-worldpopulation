@@ -1,6 +1,6 @@
-================================================
- Reusable analysis example - "world population"
-================================================
+====================================
+ REANA example - "world population"
+====================================
 
 .. image:: https://img.shields.io/travis/reanahub/reana-demo-worldpopulation.svg
    :target: https://travis-ci.org/reanahub/reana-demo-worldpopulation
@@ -9,22 +9,27 @@
    :target: https://gitter.im/reanahub/reana?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 
 .. image:: https://img.shields.io/github/license/reanahub/reana-demo-worldpopulation.svg
-   :target: https://github.com/reanahub/reana-demo-worldpopulation/blob/master/COPYING
+   :target: https://github.com/reanahub/reana-demo-worldpopulation/blob/master/LICENSE
 
 About
 =====
 
-This repository provides an example on how a research data analysis using
-Jupyter notebooks could be packaged for the `REANA <http://reanahub.io/>`_
-reusable research data analysis plaftorm.
+This `REANA <http://www.reana.io/>`_ reproducible analysis example demonstrates
+how to use parametrised Jupyter notebook to analyse the world population
+evolution.
 
-Making a research data analysis reproducible means to provide "runnable recipes"
-addressing (1) where the input datasets are, (2) what software was used to
-analyse the data, (3) which computing environment was used to run the software,
-and (4) which workflow steps were taken to run the analysis.
+Analysis structure
+==================
 
-1. Input dataset
-================
+Making a research data analysis reproducible basically means to provide
+"runnable recipes" addressing (1) where is the input data, (2) what software was
+used to analyse the data, (3) which computing environments were used to run the
+software and (4) which computational workflow steps were taken to run the
+analysis. This will permit to instantiate the analysis on the computational
+cloud and run the analysis to obtain (5) output results.
+
+1. Input data
+-------------
 
 We shall use the following input dataset:
 
@@ -34,87 +39,107 @@ It contains historical and predicted world population numbers in CSV format and
 was compiled from `Wikipedia <https://en.wikipedia.org/wiki/World_population>`_.
 
 2. Analysis code
-================
+----------------
 
 We have developed a simple Jupyter notebook for illustration:
 
 - `worldpopulation.ipynb <code/worldpopulation.ipynb>`_
 
-It studies the input dataset and prints several figures about how the world
-population evolved in various continents as a function of time.
+It studies the input dataset and prints a figure about how the world population
+evolved in the given region as a function of time.
 
-The resulting plots can be obtained as follows:
+The analysis code can be seen by browsing the above notebook.
+
+3. Compute environment
+----------------------
+
+In order to be able to rerun the analysis even several years in the future, we
+need to "encapsulate the current compute environment", for example to freeze the
+Jupyter notebook version and the notebook kernel that our analysis was using. We
+shall achieve this by preparing a `Docker <https://www.docker.com/>`_ container
+image for our analysis steps.
+
+Let us assume that we are using CentOS7 operating system and Jupyter Notebook
+1.0 with IPython 5.0 kernel to run the above analysis on our laptop. We can use
+an already-prepared Docker image called `reana-env-jupyter
+<https://github.com/reanahub/reana-env-jupyter>`_. Please have a look at that
+repository if you would like to create yours. Here it is enough to use this
+environment "as is" and simply mount our notebook code for execution.
+
+4. Analysis workflow
+--------------------
+
+This analysis is very simple because it consists basically of running only the
+notebook which will produce the final plot.
+
+In order to ease the rerunning of the analysis with different parameters, we are
+using `papermill <https://github.com/nteract/papermill>`_ to parametrise the
+notebook inputs.
+
+The input parameters are located in a tagged cell and define:
+
+- ``input_file`` - the location of the input CVS data file (see above)
+- ``region`` - the region of teh world to analyse (e.g. Africa)
+- ``year_min`` - starting year
+- ``year_max`` - ending year
+- ``output_file`` - the location where the final plot should be produced.
+
+The workflow can be represented as follows:
 
 .. code-block:: console
 
-   $ papermill ./code/worldpopulation.ipynb /dev/null \
-         -p input_file ./inputs/World_historical_and_predicted_populations_in_percentage.csv \
-         -p output_file ./outputs/plot.png
-   $ ls -l outputs/plot.png
+              START
+               |
+               |
+               V
+   +---------------------------+
+   | run parametrised notebook |  <-- input_file
+   |                           |  <-- region, year_min, year_max
+   |    $ papermill ...        |
+   +---------------------------+
+               |
+               | plot.png
+               V
+              STOP
 
-This generates a plot representing the result of our analysis:
-
-.. figure:: https://raw.githubusercontent.com/reanahub/reana-demo-worldpopulation/master/docs/plot.png
-   :alt: plot.png
-   :align: center
-
-Note that if you would like to plot different region and different year range,
-you can pass ``region``, ``year_min`` and ``year_max`` parameters via the ``-p``
-command line option:
+For example:
 
 .. code-block:: console
 
-   $ papermill ./code/worldpopulation.ipynb /dev/null \
+    $ papermill ./code/worldpopulation.ipynb /dev/null \
          -p input_file ./inputs/World_historical_and_predicted_populations_in_percentage.csv \
          -p output_file ./outputs/plot.png \
          -p region Europe \
          -p year_min 1600 \
          -p year_max 2010
-   $ ls -l outputs/plot.png
+    $ ls -l outputs/plot.png
 
-Let us now try to provide runnable recipes so that our analysis can be run in a
-reproducible manner on the REANA cloud.
+Note that you can also use `CWL <http://www.commonwl.org/v1.0/>`_ or `Yadage
+<https://github.com/diana-hep/yadage>`_ workflow specifications:
 
-3. Compute environment
-======================
+- `workflow definition using CWL <workflow/cwl/worldpopulation.cwl>`_
+- `workflow definition using Yadage <workflow/yadage/workflow.yaml>`_
 
-Let us assume that we were using CentOS7 operating system and Jupyter Notebook
-1.0 with IPython 5.0 kernel to run the above analysis on our laptop. In order to
-be able to rerun the analysis with the same version of Jupyter notebook software
-even several years in the future, we need to "encapsulate the current
-environment" where the original analysis code run.
 
-In our example, we shall achieve this by using a prepared `Docker
-<https://www.docker.com/>`_ image called `reana-env-jupyter
-<https://github.com/reanahub/reana-env-jupyter>`_. Please have a look at that
-repository if you'd like to create yours. Here it is enough to use this
-environment "as is" and simply mount our notebook for execution.
+5. Output results
+-----------------
 
-4. Analysis workflow
-====================
+The example produces a plot representing the population of the given world
+region relative to the total world population as a function of time:
 
-This analysis is very simple because it consists basically of running a single
-step that converts the Jupyter notebook to an HTML file. Nevertheless we
-demonstrate how one could use the `Yadage
-<https://github.com/diana-hep/yadage>`_ workflow engine and `Common Workflow
-Language <http://www.commonwl.org/v1.0/>`_ specification to express this in a
-structured YAML format. The corresponding workflow descriptions can be found
-here:
+.. figure:: https://raw.githubusercontent.com/reanahub/reana-demo-worldpopulation/master/docs/plot.png
+   :alt: plot.png
+   :align: center
 
-- `Yadage workflow definition <workflow/yadage/workflow.yaml>`_
-- `CWL workflow definition <workflow/cwl/worldpopulation.cwl>`_
+Local testing
+=============
 
-Now our "world population" analysis is now fully described in the
-REANA-compatible reusable analysis manner and is prepared to be run on the REANA
-cloud.
+*Optional*
 
-Local testing with Docker
-=========================
+If you would like to test the analysis locally (i.e. outside of the REANA
+platform), you can proceed as follows.
 
-Let us test whether everything works well locally in our containerised
-environment. We shall use Docker locally. Note how we mount our local
-directories ``inputs``, ``code`` and ``outputs`` into the containerised
-environment:
+Using pure Docker:
 
 .. code-block:: console
 
@@ -125,90 +150,47 @@ environment:
                   -v `pwd`/outputs:/outputs \
                   reanahub/reana-env-jupyter \
               papermill /code/worldpopulation.ipynb /dev/null
+    $ firefox outputs/plot.png
 
-Let us check the results:
+In case you are using CWL workflow specification:
 
 .. code-block:: console
 
-    $ firefox outputs/plot.png
+    $ mkdir cwl-local-run
+    $ cd cwl-local-run
+    $ cp -a ../code ../inputs ../workflow/cwl/worldpopulation_job.yml .
+    $ cwltool --quiet --outdir="../outputs" ../workflow/cwl/worldpopulation.cwl worldpopulation_job.yml
+    $ firefox ../outputs/plot.png
 
-Local testing with Yadage
-=========================
-
-Let us test whether the Yadage workflow engine execution works locally.
-
-Since Yadage only accepts one input directory as parameter, we are going to
-create a wrapper directory which will contain links to ``inputs`` and ``code``
-directories:
+In case you are using Yadage workflow specification:
 
 .. code-block:: console
 
     $ mkdir -p yadage-local-run/yadage-inputs
     $ cd yadage-local-run
     $ cp -a ../code ../inputs yadage-inputs
-
-We can now run Yadage locally as follows:
-
-.. code-block:: console
-
-   $ yadage-run . ../workflow/yadage/workflow.yaml \
+    $ yadage-run . ../workflow/yadage/workflow.yaml \
          -p notebook=code/worldpopulation.ipynb \
          -p input_file=inputs/World_historical_and_predicted_populations_in_percentage.csv \
          -p region=Africa \
          -p year_min=1500 \
          -p year_max=2012 \
          -d initdir=`pwd`/yadage-inputs
+    $ firefox worldpopulation/plot.png
 
-Let us check the results:
+Running the example on REANA cloud
+==================================
 
-.. code-block:: console
+We are now ready to run this example and on the `REANA <http://www.reana.io/>`_
+cloud.
 
-    $ ls -l worldpopulation/plot.png
-
-Local testing with CWL
-======================
-
-Let us test whether the CWL workflow execution works locally as well.
-
-To prepare the execution, we are creating a working directory called ``cwl-local-run`` which will contain both
-``inputs`` and ``code`` directory content. Also, we need to copy the workflow input file:
-
-.. code-block:: console
-
-   $ mkdir cwl-local-run
-   $ cd cwl-local-run
-   $ cp -a ../code ../inputs ../workflow/cwl/worldpopulation_job.yml .
-
-We can now run the corresponding commands locally as follows:
-
-.. code-block:: console
-
-   $ cwltool --quiet --outdir="../outputs" ../workflow/cwl/worldpopulation.cwl worldpopulation_job.yml
-
-Let us check the results:
-
-.. code-block:: console
-
-   $ ls -l ../outputs/plot.png
-
-Create REANA file
-=================
-
-Putting all together, we can now describe our world population analysis example,
-its runtime environment, the inputs, the code, the workflow and its outputs by
-means of the following REANA specification file:
+First we need to create a `reana.yaml <reana.yaml>`_ file describing the
+structure of our analysis with its inputs, the code, the runtime environment,
+the computational workflow steps and the expected outputs:
 
 .. code-block:: yaml
 
     version: 0.2.0
-    metadata:
-      authors:
-       - Alizee Pace <alizee.pace@gmail.com>
-       - Diego Rodriguez <diego.rodriguez@cern.ch>
-       - Tibor Simko <tibor.simko@cern.ch>
-      title: World population - a Jupyter notebook reusable analysis example
-      date: 21 February 2018
-      repository: https://github.com/reanahub/reana-demo-worldpopulation/
     code:
       files:
        - code/worldpopulation.ipynb
@@ -217,6 +199,11 @@ means of the following REANA specification file:
         - inputs/World_historical_and_predicted_populations_in_percentage.csv
       parameters:
         notebook: code/worldpopulation.ipynb
+        input_file: inputs/World_historical_and_predicted_populations_in_percentage.csv
+        output_file: outputs/plot.png
+        region: Africa
+        year_min: 1500
+        year_max: 2012
     outputs:
       files:
        - outputs/plot.png
@@ -227,79 +214,103 @@ means of the following REANA specification file:
       type: yadage
       file: workflow/yadage/workflow.yaml
 
-For CWL version see ``reana-cwl.yaml``.
+In case you are using CWL workflow specifications:
 
-Run the example on REANA cloud
-==============================
+- `reana.yaml using CWL <reana-cwl.yaml>`_
 
-We can now install the REANA client and submit the ROOT6 RooFit analysis example
-to run on some particular REANA cloud instance. We start by installing the
-client:
+We proceed by installing the REANA command-line client:
 
 .. code-block:: console
 
-    $ mkvirtualenv reana-client -p /usr/bin/python2.7
+    $ mkvirtualenv reana-client
     $ pip install reana-client
 
-and connect to the REANA cloud instance where we will run this example:
+We should now connect the client to the remote REANA cloud where the analysis
+will run. We do this by setting the ``REANA_SERVER_URL`` environment variable:
 
 .. code-block:: console
 
-    $ export REANA_SERVER_URL=http://192.168.99.100:32658
+    $ export REANA_SERVER_URL=https://reana.cern.ch/
 
-If you run REANA cluster locally as well, then:
-
-.. code-block:: console
-
-   $ eval $(reana-cluster env)
-
-Let us check the connection:
+Note that if you `run REANA cluster locally
+<http://reana-cluster.readthedocs.io/en/latest/gettingstarted.html#deploy-reana-cluster-locally>`_
+on your laptop, you would do:
 
 .. code-block:: console
 
-   $ reana-client ping
-   Server is running.
+    $ eval $(reana-cluster env)
 
-We can now initialise workflow and upload our input CSV data file and our
+Let us test the client-to-server connection:
+
+.. code-block:: console
+
+    $ reana-client ping
+    Server is running.
+
+We proceed to create a new workflow instance:
+
+.. code-block:: console
+
+    $ reana-client create
+    workflow.2
+    $ export REANA_WORKON=workflow.2
+
+We can now seed the analysis workspace with our input CSV data file and our
 Jupyter notebook:
 
 .. code-block:: console
 
-    $ reana-client workflow create
-    workflow.3
-    $ export REANA_WORKON=workflow.3
-    $ reana-client inputs upload ./inputs
-    File /home/simko/private/project/reana/src/reana-demo-worldpopulation/inputs was successfully uploaded.
-    $ reana-client code upload ./code
-    /home/simko/private/project/reana/src/reana-demo-worldpopulation/code/worldpopulation.ipynb was uploaded successfully.
-    $ reana-client inputs list
-    NAME                                                           SIZE   LAST-MODIFIED
-    World_historical_and_predicted_populations_in_percentage.csv   574    2018-04-20 15:17:44.732120+00:00
-    $ reana-client code list
+    $ reana-client inputs upload ./inputs ./code
+    File inputs/World_historical_and_predicted_populations_in_percentage.csv was successfully uploaded.
+    File code/worldpopulation.ipynb was successfully uploaded.
 
-Start workflow execution and enquire about its running status:
+    $ reana-client list
+    NAME                                                                  SIZE    LAST-MODIFIED
+    code/worldpopulation.ipynb                                            19223   2018-08-02 14:50:33.099697+00:00
+    inputs/World_historical_and_predicted_populations_in_percentage.csv   574     2018-08-02 14:50:33.080698+00:00
+
+We can now start the workflow execution:
 
 .. code-block:: console
 
-    $ reana-client workflow start
-    $ reana-client workflow status
+    $ reana-client start
+    workflow.2 has been started.
 
-After the workflow execution successfully finished, we can retrieve its output:
-
-.. code-block:: console
-
-    $ reana-client outputs list
-    $ reana-client outputs download outputs/plot.png
-
-Let us verify the result:
+After several minutes the workflow should be successfully finished. Let us query
+its status:
 
 .. code-block:: console
 
-    $ display outputs/plot.png
+    $ reana-client status
+    NAME       RUN_NUMBER   CREATED               STATUS     PROGRESS
+    workflow   2            2018-08-02T14:49:59   finished   1/1
 
-Note that this example demonstrated the use of the Yadage workflow engine. If
-you would like to use the CWL workflow engine, please just use ``-f
-reana-cwl.yaml`` option with the ``reana-client`` commands.
+We can list the output files:
 
-Thank you for using the `REANA <http://reanahub.io/>`_ reusable analysis
-platform.
+.. code-block:: console
+
+    $ reana-client list
+    NAME                                                                  SIZE    LAST-MODIFIED
+    worldpopulation/plot.png                                              15879   2018-08-02 14:54:46.344953+00:00
+    _yadage/yadage_snapshot_backend.json                                  709     2018-08-02 14:54:51.951951+00:00
+    _yadage/yadage_snapshot_workflow.json                                 10622   2018-08-02 14:54:51.951951+00:00
+    _yadage/yadage_template.json                                          1447    2018-08-02 14:52:37.311508+00:00
+    code/worldpopulation.ipynb                                            19223   2018-08-02 14:50:33.099697+00:00
+    inputs/World_historical_and_predicted_populations_in_percentage.csv   574     2018-08-02 14:50:33.080698+00:00
+
+We finish by downloading the generated plot:
+
+.. code-block:: console
+
+    $ reana-client download worldpopulation/plot.png
+    File worldpopulation/plot.png downloaded to /home/simko/private/project/reana/src/reana-demo-worldpopulation.
+
+Contributors
+============
+
+The list of contributors in alphabetical order:
+
+- Alizee Pace <alizee.pace@gmail.com>
+- `Anton Khodak <https://orcid.org/0000-0003-3263-4553>`_ <anton.khodak@ukr.net>
+- `Diego Rodriguez <https://orcid.org/0000-0003-0649-2002>`_ <diego.rodriguez@cern.ch>
+- `Tibor Simko <https://orcid.org/0000-0001-7202-5803>`_ <tibor.simko@cern.ch>
