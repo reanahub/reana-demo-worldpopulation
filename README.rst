@@ -226,11 +226,13 @@ We proceed by installing the REANA command-line client:
     $ pip install reana-client
 
 We should now connect the client to the remote REANA cloud where the analysis
-will run. We do this by setting the ``REANA_SERVER_URL`` environment variable:
+will run. We do this by setting the ``REANA_SERVER_URL`` environment variable
+and ``REANA_ACCESS_TOKEN`` with a valid access token:
 
 .. code-block:: console
 
     $ export REANA_SERVER_URL=https://reana.cern.ch/
+    $ export REANA_ACCESS_TOKEN=<ACCESS_TOKEN>
 
 Note that if you `run REANA cluster locally
 <http://reana-cluster.readthedocs.io/en/latest/gettingstarted.html#deploy-reana-cluster-locally>`_
@@ -238,14 +240,14 @@ on your laptop, you would do:
 
 .. code-block:: console
 
-    $ eval $(reana-cluster env)
+    $ eval $(reana-cluster env --all)
 
 Let us test the client-to-server connection:
 
 .. code-block:: console
 
     $ reana-client ping
-    Server is running.
+    Connected to https://reana.cern.ch - Server is running.
 
 We proceed to create a new workflow instance:
 
@@ -260,7 +262,7 @@ Jupyter notebook:
 
 .. code-block:: console
 
-    $ reana-client inputs upload ./inputs ./code
+    $ reana-client upload ./inputs ./code
     File inputs/World_historical_and_predicted_populations_in_percentage.csv was successfully uploaded.
     File code/worldpopulation.ipynb was successfully uploaded.
 
@@ -313,4 +315,5 @@ The list of contributors in alphabetical order:
 - Alizee Pace <alizee.pace@gmail.com>
 - `Anton Khodak <https://orcid.org/0000-0003-3263-4553>`_ <anton.khodak@ukr.net>
 - `Diego Rodriguez <https://orcid.org/0000-0003-0649-2002>`_ <diego.rodriguez@cern.ch>
+- `Dinos Kousidis <https://orcid.org/0000-0002-4914-4289>`_ <dinos.kousidis@cern.ch>
 - `Tibor Simko <https://orcid.org/0000-0001-7202-5803>`_ <tibor.simko@cern.ch>
