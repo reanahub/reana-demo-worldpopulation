@@ -190,12 +190,10 @@ the computational workflow steps and the expected outputs:
 
 .. code-block:: yaml
 
-    version: 0.2.0
-    code:
-      files:
-       - code/worldpopulation.ipynb
+    version: 0.3.0
     inputs:
       files:
+        - code/worldpopulation.ipynb
         - inputs/World_historical_and_predicted_populations_in_percentage.csv
       parameters:
         notebook: code/worldpopulation.ipynb
@@ -207,16 +205,19 @@ the computational workflow steps and the expected outputs:
     outputs:
       files:
        - outputs/plot.png
-    environments:
-      - type: docker
-        image: reanahub/reana-env-jupyter
     workflow:
-      type: yadage
-      file: workflow/yadage/workflow.yaml
+      type: serial
+      specification:
+        steps:
+          - environment: 'reanahub/reana-env-jupyter'
+            commands:
+              - mkdir -p outputs
+              - papermill code/worldpopulation.ipynb /dev/null -p input_file inputs/World_historical_and_predicted_populations_in_percentage.csv -p output_file outputs/plot.png -p region Africa -p year_min 1500 -p year_max 2012
 
-In case you are using CWL workflow specifications:
+In case you are using CWL or Yadage workflow specifications:
 
 - `reana.yaml using CWL <reana-cwl.yaml>`_
+- `reana.yaml using Yadage <reana-yadage.yaml>`_
 
 We proceed by installing the REANA command-line client:
 
@@ -254,8 +255,8 @@ We proceed to create a new workflow instance:
 .. code-block:: console
 
     $ reana-client create
-    workflow.2
-    $ export REANA_WORKON=workflow.2
+    workflow.1
+    $ export REANA_WORKON=workflow.1
 
 We can now seed the analysis workspace with our input CSV data file and our
 Jupyter notebook:
@@ -268,15 +269,15 @@ Jupyter notebook:
 
     $ reana-client list
     NAME                                                                  SIZE    LAST-MODIFIED
-    code/worldpopulation.ipynb                                            19223   2018-08-02 14:50:33.099697+00:00
-    inputs/World_historical_and_predicted_populations_in_percentage.csv   574     2018-08-02 14:50:33.080698+00:00
+    code/worldpopulation.ipynb                                            19223   2018-08-29 08:11:57.575697+00:00
+    inputs/World_historical_and_predicted_populations_in_percentage.csv   574     2018-08-29 08:11:57.542697+00:00
 
 We can now start the workflow execution:
 
 .. code-block:: console
 
     $ reana-client start
-    workflow.2 has been started.
+    workflow.1 has been started.
 
 After several minutes the workflow should be successfully finished. Let us query
 its status:
@@ -285,7 +286,7 @@ its status:
 
     $ reana-client status
     NAME       RUN_NUMBER   CREATED               STATUS     PROGRESS
-    workflow   2            2018-08-02T14:49:59   finished   1/1
+    workflow   1            2018-08-29T08:11:35   finished   2/2
 
 We can list the output files:
 
@@ -293,19 +294,16 @@ We can list the output files:
 
     $ reana-client list
     NAME                                                                  SIZE    LAST-MODIFIED
-    worldpopulation/plot.png                                              15879   2018-08-02 14:54:46.344953+00:00
-    _yadage/yadage_snapshot_backend.json                                  709     2018-08-02 14:54:51.951951+00:00
-    _yadage/yadage_snapshot_workflow.json                                 10622   2018-08-02 14:54:51.951951+00:00
-    _yadage/yadage_template.json                                          1447    2018-08-02 14:52:37.311508+00:00
-    code/worldpopulation.ipynb                                            19223   2018-08-02 14:50:33.099697+00:00
-    inputs/World_historical_and_predicted_populations_in_percentage.csv   574     2018-08-02 14:50:33.080698+00:00
+    outputs/plot.png                                                      15879   2018-08-29 08:12:54.547782+00:00
+    code/worldpopulation.ipynb                                            19223   2018-08-29 08:11:57.575697+00:00
+    inputs/World_historical_and_predicted_populations_in_percentage.csv   574     2018-08-29 08:11:57.542697+00:00
 
 We finish by downloading the generated plot:
 
 .. code-block:: console
 
-    $ reana-client download worldpopulation/plot.png
-    File worldpopulation/plot.png downloaded to /home/simko/private/project/reana/src/reana-demo-worldpopulation.
+    $ reana-client download outputs/plot.png
+    File outputs/plot.png downloaded to /home/simko/private/project/reana/src/reana-demo-worldpopulation.
 
 Contributors
 ============

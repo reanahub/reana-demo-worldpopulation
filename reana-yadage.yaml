@@ -14,9 +14,5 @@ outputs:
   files:
    - outputs/plot.png
 workflow:
-  type: serial
-  specification:
-    steps:
-      - environment: 'reanahub/reana-env-jupyter'
-        commands:
-          - mkdir -p outputs && papermill code/worldpopulation.ipynb /dev/null -p input_file inputs/World_historical_and_predicted_populations_in_percentage.csv -p output_file outputs/plot.png -p region Africa -p year_min 1500 -p year_max 2012
+  type: yadage
+  file: workflow/yadage/workflow.yaml

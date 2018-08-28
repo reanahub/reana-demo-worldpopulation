@@ -1,18 +1,13 @@
-version: 0.2.0
-code:
-  files:
-   - code/worldpopulation.ipynb
+version: 0.3.0
 inputs:
   files:
+    - code/worldpopulation.ipynb
     - inputs/World_historical_and_predicted_populations_in_percentage.csv
   parameters:
     input: workflow/cwl/worldpopulation_job.yml
 outputs:
   files:
    - outputs/worldpopulation.html
-environments:
-  - type: docker
-    image: reanahub/reana-env-jupyter
 workflow:
   type: cwl
   file: workflow/cwl/worldpopulation.cwl
