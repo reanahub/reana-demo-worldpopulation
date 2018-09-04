@@ -211,8 +211,7 @@ the computational workflow steps and the expected outputs:
         steps:
           - environment: 'reanahub/reana-env-jupyter'
             commands:
-              - mkdir -p outputs
-              - papermill code/worldpopulation.ipynb /dev/null -p input_file inputs/World_historical_and_predicted_populations_in_percentage.csv -p output_file outputs/plot.png -p region Africa -p year_min 1500 -p year_max 2012
+              - mkdir -p outputs && papermill $notebook /dev/null -p input_file ${input_file} -p output_file ${output_file} -p region $region -p year_min ${year_min} -p year_max ${year_max}
 
 In case you are using CWL or Yadage workflow specifications:
 
