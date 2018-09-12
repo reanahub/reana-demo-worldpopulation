@@ -19,5 +19,13 @@ before_install:
 
 script:
   - yadage-validate workflow/yadage/workflow.yaml | grep -q 'workflow validates'
-  - docker run -i -t --rm -v `pwd`/code:/code -v `pwd`/inputs:/inputs -v `pwd`/outputs:/outputs reanahub/reana-env-jupyter papermill /code/worldpopulation.ipynb /dev/null
-  - ls -l `pwd`/outputs/plot.png
+  - docker run -i -t --rm -v `pwd`:/workdir reanahub/reana-env-jupyter bash -c '
+      cd /workdir &&
+      mkdir -p ./results &&
+      papermill ./code/worldpopulation.ipynb /dev/null
+        -p input_file ./data/World_historical_and_predicted_populations_in_percentage.csv
+        -p output_file ./results/plot.png
+        -p region Europe
+        -p year_min 1600
+        -p year_max 2010'
+  - ls -l `pwd`/results/plot.png

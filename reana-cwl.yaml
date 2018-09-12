@@ -2,12 +2,12 @@ version: 0.3.0
 inputs:
   files:
     - code/worldpopulation.ipynb
-    - inputs/World_historical_and_predicted_populations_in_percentage.csv
+    - data/World_historical_and_predicted_populations_in_percentage.csv
   parameters:
     input: workflow/cwl/worldpopulation_job.yml
-outputs:
-  files:
-   - outputs/worldpopulation.html
 workflow:
   type: cwl
   file: workflow/cwl/worldpopulation.cwl
+outputs:
+  files:
+   - results/plot.png
