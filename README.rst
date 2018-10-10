@@ -173,24 +173,24 @@ the resulting plots:
 
 .. code-block:: console
 
-    $ # install REANA client:
+    $ # install REANA client
     $ mkvirtualenv reana-client
     $ pip install reana-client
-    $ # connect to some REANA cloud instance:
+    $ # connect to some REANA cloud instance
     $ export REANA_SERVER_URL=https://reana.cern.ch/
     $ export REANA_ACCESS_TOKEN=XXXXXXX
-    $ # create new workflow:
+    $ # create new workflow
     $ reana-client create -n my-analysis
     $ export REANA_WORKON=my-analysis
-    $ # upload input code and data to the workspace:
+    $ # upload input code and data to the workspace
     $ reana-client upload ./code ./data
-    $ # start computational workflow:
+    $ # start computational workflow
     $ reana-client start
-    $ # ... should be finished in about a minute:
+    $ # ... should be finished in about a minute
     $ reana-client status
-    $ # list workspace files:
+    $ # list workspace files
     $ reana-client list
-    $ # download output results:
+    $ # download output results
     $ reana-client download results/plot.png
 
 Please see the `REANA-Client <https://reana-client.readthedocs.io/>`_
