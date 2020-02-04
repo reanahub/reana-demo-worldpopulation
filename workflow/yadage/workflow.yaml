@@ -20,11 +20,11 @@ stages:
     scheduler:
       scheduler_type: 'singlestep-stage'
       parameters:
-        notebook: {stages: init, output: notebook, unwrap: true}
-        region: {stages: init, output: region, unwrap: true}
-        year_min: {stages: init, output: year_min, unwrap: true}
-        year_max: {stages: init, output: year_max, unwrap: true}
-        input_file: {stages: init, output: input_file, unwrap: true}
+        notebook: {step: init, output: notebook}
+        region: {step: init, output: region}
+        year_min: {step: init, output: year_min}
+        year_max: {step: init, output: year_max}
+        input_file: {step: init, output: input_file}
         outputfile: '{workdir}/plot.png'
       step:
         process:
