@@ -3,6 +3,8 @@ inputs:
   files:
     - code/worldpopulation.ipynb
     - data/World_historical_and_predicted_populations_in_percentage.csv
+  directories:
+    - workflow/yadage
   parameters:
     notebook: code/worldpopulation.ipynb
     input_file: data/World_historical_and_predicted_populations_in_percentage.csv
@@ -15,4 +17,4 @@ workflow:
   file: workflow/yadage/workflow.yaml
 outputs:
   files:
-   - results/plot.png
+   - worldpopulation/plot.png

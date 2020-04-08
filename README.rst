@@ -174,26 +174,26 @@ the resulting plots:
 .. code-block:: console
 
     $ # create new virtual environment
-    $ virtualenv ~/.virtualenvs/myreana
-    $ source ~/.virtualenvs/myreana/bin/activate
+    $ virtualenv ~/.virtualenvs/reana
+    $ source ~/.virtualenvs/reana/bin/activate
     $ # install REANA client
     $ pip install reana-client
     $ # connect to some REANA cloud instance
     $ export REANA_SERVER_URL=https://reana.cern.ch/
     $ export REANA_ACCESS_TOKEN=XXXXXXX
     $ # create new workflow
-    $ reana-client create -n my-analysis
-    $ export REANA_WORKON=my-analysis
-    $ # upload input code and data to the workspace
-    $ reana-client upload ./code ./data
+    $ reana-client create -n myanalysis
+    $ export REANA_WORKON=myanalysis
+    $ # upload input code, data and workflow to the workspace
+    $ reana-client upload
     $ # start computational workflow
     $ reana-client start
     $ # ... should be finished in about a minute
     $ reana-client status
     $ # list workspace files
-    $ reana-client list
+    $ reana-client ls
     $ # download output results
-    $ reana-client download results/plot.png
+    $ reana-client download
 
 Please see the `REANA-Client <https://reana-client.readthedocs.io/>`_
 documentation for more detailed explanation of typical ``reana-client`` usage
@@ -208,4 +208,5 @@ The list of contributors in alphabetical order:
 - `Anton Khodak <https://orcid.org/0000-0003-3263-4553>`_
 - `Diego Rodriguez <https://orcid.org/0000-0003-0649-2002>`_
 - `Dinos Kousidis <https://orcid.org/0000-0002-4914-4289>`_
+- `Marco Vidal <https://orcid.org/0000-0002-9363-4971>`_
 - `Tibor Simko <https://orcid.org/0000-0001-7202-5803>`_

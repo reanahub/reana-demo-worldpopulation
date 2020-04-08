@@ -3,6 +3,8 @@ inputs:
   files:
     - code/worldpopulation.ipynb
     - data/World_historical_and_predicted_populations_in_percentage.csv
+  directories:
+    - workflow/cwl
   parameters:
     input: workflow/cwl/worldpopulation_job.yml
 workflow:
@@ -10,4 +12,4 @@ workflow:
   file: workflow/cwl/worldpopulation.cwl
 outputs:
   files:
-   - results/plot.png
+   - outputs/plot.png
