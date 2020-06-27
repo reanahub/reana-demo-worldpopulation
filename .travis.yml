@@ -19,7 +19,7 @@ before_install:
 
 script:
   - yadage-validate workflow/yadage/workflow.yaml | grep -q 'workflow validates'
-  - docker run -i -t --rm -v `pwd`:/workdir reanahub/reana-env-jupyter bash -c '
+  - docker run -i -t --rm -v `pwd`:/workdir reanahub/reana-env-jupyter:1.0.0 bash -c '
       cd /workdir &&
       mkdir -p ./results &&
       papermill ./code/worldpopulation.ipynb /dev/null

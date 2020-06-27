@@ -37,3 +37,4 @@ stages:
         environment:
           environment_type: 'docker-encapsulated'
           image: 'reanahub/reana-env-jupyter'
+          imagetag: '1.0.0'
