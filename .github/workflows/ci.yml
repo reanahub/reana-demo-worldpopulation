@@ -1,0 +1,42 @@
+# This file is part of REANA.
+# Copyright (C) 2020 CERN.
+#
+# REANA is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
+
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 2.7
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install yadage
+
+      - name: Validate workflow
+        run: yadage-validate workflow/yadage/workflow.yaml | grep -q 'workflow validates'
+
+      - run: docker run -i --rm -v `pwd`:/workdir reanahub/reana-env-jupyter:1.0.0 bash -c '
+              cd /workdir &&
+              mkdir -p ./results &&
+              papermill ./code/worldpopulation.ipynb /dev/null
+                -p input_file ./data/World_historical_and_predicted_populations_in_percentage.csv
+                -p output_file ./results/plot.png
+                -p region Europe
+                -p year_min 1600
+                -p year_max 2010'
+
+      - run: ls -l `pwd`/results/plot.png
+
