@@ -1,0 +1,20 @@
+version: 0.3.0
+inputs:
+  files:
+    - code/worldpopulation.ipynb
+    - data/World_historical_and_predicted_populations_in_percentage.csv
+  directories:
+    - workflow/yadage
+  parameters:
+    notebook: code/worldpopulation.ipynb
+    input_file: data/World_historical_and_predicted_populations_in_percentage.csv
+    output_file: results/plot.png
+    region: Africa
+    year_min: 1500
+    year_max: 2012
+workflow:
+  type: yadage
+  file: workflow/yadage/workflow-htcondorcern.yaml
+outputs:
+  files:
+   - worldpopulation/plot.png
