@@ -32,6 +32,7 @@ steps:
     hints:
       reana:
         compute_backend: htcondorcern
+        htcondor_max_runtime: espresso
     run: worldpopulation.tool
     in:
       notebook: notebook

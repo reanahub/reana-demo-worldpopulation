@@ -40,3 +40,4 @@ stages:
           imagetag: '1.0.0'
           resources:
             - compute_backend: htcondorcern
+            - htcondor_max_runtime: espresso

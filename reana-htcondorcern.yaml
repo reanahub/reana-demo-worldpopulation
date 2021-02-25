@@ -16,6 +16,7 @@ workflow:
     steps:
       - environment: 'reanahub/reana-env-jupyter:1.0.0'
         compute_backend: htcondorcern
+        htcondor_max_runtime: espresso
         commands:
           - mkdir -p results && papermill ${notebook} /dev/null -p input_file ${input_file} -p output_file ${output_file} -p region ${region} -p year_min ${year_min} -p year_max ${year_max}
 outputs:
