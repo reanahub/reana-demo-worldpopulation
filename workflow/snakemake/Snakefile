@@ -1,0 +1,34 @@
+# Note that if you are working on the analysis development locally, i.e. outside
+# of the REANA platform, you can proceed as follows:
+#
+#   $ mkdir snakemake-local-run
+#   $ cd snakemake-local-run
+#   $ virtualenv ~/.virtualenvs/worldpopulation-snakemake
+#   $ source ~/.virtualenvs/worldpopulation-snakemake/bin/activate
+#   $ pip install snakemake papermill ipykernel pandas matplotlib
+#   $ cp -a ../code ../data .
+#   $ snakemake -s ../workflow/snakemake/Snakefile \
+#               --configfile ../workflow/snakemake/inputs.yaml -p --cores 1
+#   $ open results/plot.png
+
+rule all:
+    input:
+        config["notebook"],
+        config["output_file"]
+
+rule worldpopulation:
+    input:
+        notebook=config["notebook"],
+        input_file=config["input_file"]
+    params:
+        region=config["region"],
+        year_max=config["year_max"],
+        year_min=config["year_min"]
+    output:
+        output_file=config["output_file"]
+    container:
+        "reanahub/reana-env-jupyter:1.0.0"
+    shell:
+        "mkdir -p results && papermill {input.notebook} /dev/null -p "
+        "input_file {input.input_file} -p output_file {output.output_file} "
+        "-p region {params.region} -p year_min {params.year_min} -p year_max {params.year_max}"
