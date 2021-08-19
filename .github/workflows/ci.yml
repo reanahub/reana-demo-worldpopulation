@@ -28,7 +28,7 @@ jobs:
       - name: Validate workflow
         run: yadage-validate workflow/yadage/workflow.yaml | grep -q 'workflow validates'
 
-      - run: docker run -i --rm -v `pwd`:/workdir reanahub/reana-env-jupyter:1.0.0 bash -c '
+      - run: docker run -i --rm -v `pwd`:/workdir reanahub/reana-env-jupyter:2.0.0 bash -c '
               cd /workdir &&
               mkdir -p ./results &&
               papermill ./code/worldpopulation.ipynb /dev/null
@@ -39,4 +39,3 @@ jobs:
                 -p year_max 2010'
 
       - run: ls -l `pwd`/results/plot.png
-

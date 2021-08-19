@@ -6,7 +6,7 @@ class: CommandLineTool
 requirements:
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
-    dockerPull: reanahub/reana-env-jupyter:1.0.0
+    dockerPull: reanahub/reana-env-jupyter:2.0.0
 
 baseCommand: ["papermill"]
 
