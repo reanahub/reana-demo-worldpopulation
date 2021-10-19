@@ -1,0 +1,23 @@
+rule all:
+    input:
+        config["notebook"],
+        config["output_file"]
+
+rule worldpopulation:
+    input:
+        notebook=config["notebook"],
+        input_file=config["input_file"]
+    params:
+        region=config["region"],
+        year_max=config["year_max"],
+        year_min=config["year_min"]
+    resources:
+        compute_backend="slurmcern"
+    output:
+        output_file=config["output_file"]
+    container:
+        "docker://reanahub/reana-env-jupyter:2.0.0"
+    shell:
+        "mkdir -p results && papermill {input.notebook} /dev/null -p "
+        "input_file {input.input_file} -p output_file {output.output_file} "
+        "-p region {params.region} -p year_min {params.year_min} -p year_max {params.year_max}"
