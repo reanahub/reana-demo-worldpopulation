@@ -11,6 +11,9 @@
 .. image:: https://img.shields.io/github/license/reanahub/reana-demo-worldpopulation.svg
    :target: https://github.com/reanahub/reana-demo-worldpopulation/blob/master/LICENSE
 
+.. image:: https://www.reana.io/static/img/badges/launch-on-reana-at-cern.svg
+   :target: https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana.yaml&name=reana-demo-worldpopulation
+
 About
 =====
 
@@ -135,6 +138,35 @@ region relative to the total world population as a function of time:
 
 Running the example on REANA cloud
 ==================================
+
+There are two ways to execute this analysis example on REANA.
+
+If you would like to simply launch this analysis example on the REANA instance
+at CERN and inspect its results using the web interface, please click on one of the following badges,
+depending on which workflow system (CWL, Serial, Snakemake, Yadage) you would like to use:
+
+.. raw:: html
+
+   <a href="https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana-cwl.yaml&name=reana-demo-worldpopulation-cwl">
+     <img src="https://www.reana.io/static/img/badges/launch-with-cwl-on-reana-at-cern.svg" alt="Launch with CWL on REANA@CERN badge" />
+   </a>
+   <br />
+   <a href="https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana.yaml&name=reana-demo-worldpopulation-serial">
+     <img src="https://www.reana.io/static/img/badges/launch-with-serial-on-reana-at-cern.svg" alt="Launch with Serial on REANA@CERN badge" />
+   </a>
+   <br />
+   <a href="https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana-snakemake.yaml&name=reana-demo-worldpopulation-snakemake">
+     <img src="https://www.reana.io/static/img/badges/launch-with-snakemake-on-reana-at-cern.svg" alt="Launch with Snakemake on REANA@CERN badge"/>
+   </a>
+   <br />
+   <a href="https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana-yadage.yaml&name=reana-demo-worldpopulation-yadage">
+     <img src="https://www.reana.io/static/img/badges/launch-with-yadage-on-reana-at-cern.svg" alt="Launch with Yadage on REANA@CERN badge"/>
+   </a>
+
+|
+
+If you would like a step-by-step guide on how to use the REANA command-line
+client to launch this analysis example, please read on.
 
 We start by creating a `reana.yaml <reana.yaml>`_ file describing the above
 analysis structure with its inputs, code, runtime environment, computational
