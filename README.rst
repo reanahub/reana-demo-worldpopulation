@@ -190,7 +190,7 @@ workflow steps and expected outputs:
       type: serial
       specification:
         steps:
-          - environment: 'reanahub/reana-env-jupyter:2.0.0'
+          - environment: 'docker.io/reanahub/reana-env-jupyter:2.0.0'
             commands:
               - mkdir -p results && papermill ${notebook} /dev/null -p input_file ${input_file} -p output_file ${output_file} -p region ${region} -p year_min ${year_min} -p year_max ${year_max}
     outputs:

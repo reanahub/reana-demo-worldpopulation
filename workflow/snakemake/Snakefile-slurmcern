@@ -16,7 +16,7 @@ rule worldpopulation:
     output:
         output_file=config["output_file"]
     container:
-        "docker://reanahub/reana-env-jupyter:2.0.0"
+        "docker://docker.io/reanahub/reana-env-jupyter:2.0.0"
     shell:
         "mkdir -p results && papermill {input.notebook} /dev/null -p "
         "input_file {input.input_file} -p output_file {output.output_file} "

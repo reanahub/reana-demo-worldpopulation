@@ -36,5 +36,5 @@ stages:
             outputfile: outputfile
         environment:
           environment_type: 'docker-encapsulated'
-          image: 'reanahub/reana-env-jupyter'
+          image: 'docker.io/reanahub/reana-env-jupyter'
           imagetag: '2.0.0'
