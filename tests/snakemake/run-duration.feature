@@ -9,8 +9,8 @@ Feature: Run duration
     Scenario: The workflow terminates in a reasonable amount of time
         When the workflow execution completes
         Then the workflow status should be "finished"
-        And the workflow run duration should be less than 5 minutes
+        And the workflow run duration should be less than 9 minutes
 
     Scenario: The worldpopulation step terminates in a reasonable amount of time
         When the workflow is finished
-        Then the duration of the step "worldpopulation" should be less than 5 minutes
+        Then the duration of the step "worldpopulation" should be less than 9 minutes

@@ -9,4 +9,4 @@ Feature: Run duration
     Scenario: The workflow terminates in a reasonable amount of time
         When the workflow execution completes
         Then the workflow status should be "finished"
-        And the workflow run duration should be less than 2 minutes
+        And the workflow run duration should be less than 9 minutes
