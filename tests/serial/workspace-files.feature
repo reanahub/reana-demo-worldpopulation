@@ -14,10 +14,10 @@ Feature: Workspace files
     Scenario: The workflow generates the final plot
         When the workflow is finished
         Then the workspace should contain "results/plot.png"
-        And the sha256 checksum of the file "results/plot.png" should be "32a45b2bab456916da0bfaa9f399237680407f1342033e10571d1fbcf2f6ced8"
+        And the sha256 checksum of the file "results/plot.png" should be "ede32c402ca192c338087136b9a9b1081ed914c5afc058d1cd408d806d81a8fc"
         And all the outputs should be included in the workspace
 
     Scenario: The total workspace size remains within reasonable limits
         When the workflow is finished
         Then the workspace size should be more than 20KiB
-        And the workspace size should be less than 85KiB
+        And the workspace size should be less than 100KiB

@@ -97,7 +97,7 @@ jobs:
         uses: reanahub/reana-github-actions/local-run@v1
         with:
           commands: |
-            docker run -i --rm -v `pwd`:/workdir docker.io/reanahub/reana-env-jupyter:2.0.0 bash -c '
+            docker run -i --rm -v `pwd`:/workdir docker.io/reanahub/reana-env-jupyter:3.0.0 bash -c '
               cd /workdir &&
               mkdir -p ./results &&
               papermill ./code/worldpopulation.ipynb /dev/null \

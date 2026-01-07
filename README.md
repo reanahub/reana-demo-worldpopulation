@@ -46,8 +46,8 @@ In order to be able to rerun the analysis even several years in the future, we n
 version and the notebook kernel that our analysis was using. We shall achieve this by
 preparing a [Docker](https://www.docker.com/) container image for our analysis steps.
 
-Let us assume that we are using CentOS7 operating system and Jupyter Notebook 1.0 with
-IPython 5.0 kernel to run the above analysis on our laptop. We can use an
+Let us assume that we are using Ubuntu 24.04 operating system and Jupyter Notebook with
+IPython kernel to run the above analysis on our laptop. We can use an
 already-prepared Docker image called
 [reana-env-jupyter](https://github.com/reanahub/reana-env-jupyter). Please have a look at
 that repository if you would like to create yours. Here it is enough to use this
@@ -154,7 +154,7 @@ workflow:
   type: serial
   specification:
     steps:
-      - environment: 'docker.io/reanahub/reana-env-jupyter:2.0.0'
+      - environment: 'docker.io/reanahub/reana-env-jupyter:3.0.0'
         commands:
           - mkdir -p results && papermill ${notebook} /dev/null -p input_file ${input_file} -p output_file ${output_file} -p region ${region} -p year_min ${year_min} -p year_max ${year_max}
 outputs:

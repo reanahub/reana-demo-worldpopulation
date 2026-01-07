@@ -37,7 +37,7 @@ stages:
         environment:
           environment_type: 'docker-encapsulated'
           image: 'docker.io/reanahub/reana-env-jupyter'
-          imagetag: '2.0.0'
+          imagetag: '3.0.0'
           resources:
             - compute_backend: htcondorcern
             - htcondor_max_runtime: espresso
