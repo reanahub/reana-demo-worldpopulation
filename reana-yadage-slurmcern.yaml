@@ -17,4 +17,4 @@ workflow:
   file: workflow/yadage/workflow-slurmcern.yaml
 outputs:
   files:
-   - worldpopulation/plot.png
+    - worldpopulation/plot.png

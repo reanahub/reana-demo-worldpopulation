@@ -18,26 +18,29 @@ stages:
   - name: worldpopulation
     dependencies: [init]
     scheduler:
-      scheduler_type: 'singlestep-stage'
+      scheduler_type: "singlestep-stage"
       parameters:
-        notebook: {step: init, output: notebook}
-        region: {step: init, output: region}
-        year_min: {step: init, output: year_min}
-        year_max: {step: init, output: year_max}
-        input_file: {step: init, output: input_file}
-        outputfile: '{workdir}/plot.png'
+        notebook: { step: init, output: notebook }
+        region: { step: init, output: region }
+        year_min: { step: init, output: year_min }
+        year_max: { step: init, output: year_max }
+        input_file: { step: init, output: input_file }
+        outputfile: "{workdir}/plot.png"
       step:
         process:
-          process_type: 'string-interpolated-cmd'
-          cmd: 'papermill "{notebook}" /dev/null -p input_file "{input_file}" -p region "{region}" -p year_min "{year_min}" -p year_max "{year_max}" -p output_file "{outputfile}"'
+          process_type: "string-interpolated-cmd"
+          cmd:
+            'papermill "{notebook}" /dev/null -p input_file "{input_file}" -p
+            region "{region}" -p year_min "{year_min}" -p year_max "{year_max}"
+            -p output_file "{outputfile}"'
         publisher:
-          publisher_type: 'frompar-pub'
+          publisher_type: "frompar-pub"
           outputmap:
             outputfile: outputfile
         environment:
-          environment_type: 'docker-encapsulated'
-          image: 'docker.io/reanahub/reana-env-jupyter'
-          imagetag: '3.0.0'
+          environment_type: "docker-encapsulated"
+          image: "docker.io/reanahub/reana-env-jupyter"
+          imagetag: "3.0.0"
           resources:
             - compute_backend: htcondorcern
             - htcondor_max_runtime: espresso

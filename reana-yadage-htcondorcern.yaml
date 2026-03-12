@@ -17,4 +17,4 @@ workflow:
   file: workflow/yadage/workflow-htcondorcern.yaml
 outputs:
   files:
-   - worldpopulation/plot.png
+    - worldpopulation/plot.png

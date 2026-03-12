@@ -24,8 +24,7 @@ cloud and run the analysis to obtain (5) output results.
 
 We shall use the following input dataset:
 
--
-[World_historical_and_predicted_populations_in_percentage.csv](data/World_historical_and_predicted_populations_in_percentage.csv)
+- [World_historical_and_predicted_populations_in_percentage.csv](data/World_historical_and_predicted_populations_in_percentage.csv)
 
 It contains historical and predicted world population numbers in CSV format and
 was compiled from [Wikipedia](https://en.wikipedia.org/wiki/World_population).
@@ -160,9 +159,11 @@ workflow:
   type: serial
   specification:
     steps:
-      - environment: 'docker.io/reanahub/reana-env-jupyter:3.0.0'
+      - environment: "docker.io/reanahub/reana-env-jupyter:3.0.0"
         commands:
-          - mkdir -p results && papermill ${notebook} /dev/null -p input_file ${input_file} -p output_file ${output_file} -p region ${region} -p year_min ${year_min} -p year_max ${year_max}
+          - mkdir -p results && papermill ${notebook} /dev/null -p input_file
+            ${input_file} -p output_file ${output_file} -p region ${region} -p
+            year_min ${year_min} -p year_max ${year_max}
 outputs:
   files:
     - results/plot.png
