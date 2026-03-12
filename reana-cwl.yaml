@@ -12,7 +12,7 @@ workflow:
   file: workflow/cwl/worldpopulation.cwl
 outputs:
   files:
-   - outputs/plot.png
+    - outputs/plot.png
 tests:
   files:
     - tests/cwl/log-messages.feature

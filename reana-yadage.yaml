@@ -17,7 +17,7 @@ workflow:
   file: workflow/yadage/workflow.yaml
 outputs:
   files:
-   - worldpopulation/plot.png
+    - worldpopulation/plot.png
 tests:
   files:
     - tests/yadage/log-messages.feature

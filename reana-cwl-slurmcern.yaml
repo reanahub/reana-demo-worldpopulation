@@ -12,4 +12,4 @@ workflow:
   file: workflow/cwl/worldpopulation-slurmcern.cwl
 outputs:
   files:
-   - outputs/plot.png
+    - outputs/plot.png

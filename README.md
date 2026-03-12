@@ -7,17 +7,18 @@
 
 ## About
 
-This [REANA](http://www.reana.io/) reproducible analysis example demonstrates how to use
-parametrised Jupyter notebook to analyse the world population evolution.
+This [REANA](http://www.reana.io/) reproducible analysis example demonstrates
+how to use parametrised Jupyter notebook to analyse the world population
+evolution.
 
 ## Analysis structure
 
-Making a research data analysis reproducible basically means to provide "runnable
-recipes" addressing (1) where is the input data, (2) what software was used to analyse
-the data, (3) which computing environments were used to run the software and (4) which
-computational workflow steps were taken to run the analysis. This will permit to
-instantiate the analysis on the computational cloud and run the analysis to obtain (5)
-output results.
+Making a research data analysis reproducible basically means to provide
+"runnable recipes" addressing (1) where is the input data, (2) what software was
+used to analyse the data, (3) which computing environments were used to run the
+software and (4) which computational workflow steps were taken to run the
+analysis. This will permit to instantiate the analysis on the computational
+cloud and run the analysis to obtain (5) output results.
 
 ### 1. Input data
 
@@ -25,8 +26,8 @@ We shall use the following input dataset:
 
 - [World_historical_and_predicted_populations_in_percentage.csv](data/World_historical_and_predicted_populations_in_percentage.csv)
 
-It contains historical and predicted world population numbers in CSV format and was
-compiled from [Wikipedia](https://en.wikipedia.org/wiki/World_population).
+It contains historical and predicted world population numbers in CSV format and
+was compiled from [Wikipedia](https://en.wikipedia.org/wiki/World_population).
 
 ### 2. Analysis code
 
@@ -34,32 +35,35 @@ We have developed a simple Jupyter notebook for illustration:
 
 - [worldpopulation.ipynb](code/worldpopulation.ipynb)
 
-It studies the input dataset and prints a figure about how the world population evolved
-in the given region as a function of time.
+It studies the input dataset and prints a figure about how the world population
+evolved in the given region as a function of time.
 
 The analysis code can be seen by browsing the above notebook.
 
 ### 3. Compute environment
 
-In order to be able to rerun the analysis even several years in the future, we need to
-"encapsulate the current compute environment", for example to freeze the Jupyter notebook
-version and the notebook kernel that our analysis was using. We shall achieve this by
-preparing a [Docker](https://www.docker.com/) container image for our analysis steps.
+In order to be able to rerun the analysis even several years in the future, we
+need to "encapsulate the current compute environment", for example to freeze the
+Jupyter notebook version and the notebook kernel that our analysis was using. We
+shall achieve this by preparing a [Docker](https://www.docker.com/) container
+image for our analysis steps.
 
-Let us assume that we are using Ubuntu 24.04 operating system and Jupyter Notebook with
-IPython kernel to run the above analysis on our laptop. We can use an
-already-prepared Docker image called
-[reana-env-jupyter](https://github.com/reanahub/reana-env-jupyter). Please have a look at
-that repository if you would like to create yours. Here it is enough to use this
-environment "as is" and simply mount our notebook code for execution.
+Let us assume that we are using Ubuntu 24.04 operating system and Jupyter
+Notebook with IPython kernel to run the above analysis on our laptop. We can use
+an already-prepared Docker image called
+[reana-env-jupyter](https://github.com/reanahub/reana-env-jupyter). Please have
+a look at that repository if you would like to create yours. Here it is enough
+to use this environment "as is" and simply mount our notebook code for
+execution.
 
 ### 4. Analysis workflow
 
-This analysis is very simple because it consists basically of running only the notebook
-which will produce the final plot.
+This analysis is very simple because it consists basically of running only the
+notebook which will produce the final plot.
 
-In order to ease the rerunning of the analysis with different parameters, we are using
-[papermill](https://github.com/nteract/papermill) to parametrise the notebook inputs.
+In order to ease the rerunning of the analysis with different parameters, we are
+using [papermill](https://github.com/nteract/papermill) to parametrise the
+notebook inputs.
 
 The input parameters are located in a tagged cell and define:
 
@@ -99,8 +103,9 @@ $ papermill ./code/worldpopulation.ipynb /dev/null \
 $ ls -l results/plot.png
 ```
 
-Note that we can also use [CWL](http://www.commonwl.org/v1.0/), [Yadage](https://github.com/diana-hep/yadage) or [Snakemake](https://snakemake.github.io)
-: workflow specifications:
+Note that we can also use [CWL](http://www.commonwl.org/v1.0/),
+[Yadage](https://github.com/diana-hep/yadage) or
+[Snakemake](https://snakemake.github.io) : workflow specifications:
 
 - [workflow definition using CWL](workflow/cwl/worldpopulation.cwl)
 - [workflow definition using Yadage](workflow/yadage/workflow.yaml)
@@ -108,19 +113,19 @@ Note that we can also use [CWL](http://www.commonwl.org/v1.0/), [Yadage](https:/
 
 ### 5. Output results
 
-The example produces a plot representing the population of the given world region
-relative to the total world population as a function of time:
+The example produces a plot representing the population of the given world
+region relative to the total world population as a function of time:
 
-![](https://raw.githubusercontent.com/reanahub/reana-demo-worldpopulation/master/docs/plot.png)
+![image](https://raw.githubusercontent.com/reanahub/reana-demo-worldpopulation/master/docs/plot.png)
 
 ## Running the example on REANA cloud
 
 There are two ways to execute this analysis example on REANA.
 
-If you would like to simply launch this analysis example on the REANA instance at CERN
-and inspect its results using the web interface, please click on one of the following
-badges, depending on which workflow system (CWL, Serial, Snakemake, Yadage) you would
-like to use:
+If you would like to simply launch this analysis example on the REANA instance
+at CERN and inspect its results using the web interface, please click on one of
+the following badges, depending on which workflow system (CWL, Serial,
+Snakemake, Yadage) you would like to use:
 
 [![Launch with CWL on REANA@CERN badge](https://www.reana.io/static/img/badges/launch-with-cwl-on-reana-at-cern.svg)](https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana-cwl.yaml&name=reana-demo-worldpopulation-cwl)
 
@@ -130,12 +135,12 @@ like to use:
 
 [![Launch with Yadage on REANA@CERN badge](https://www.reana.io/static/img/badges/launch-with-yadage-on-reana-at-cern.svg)](https://reana.cern.ch/launch?url=https%3A%2F%2Fgithub.com%2Freanahub%2Freana-demo-worldpopulation&specification=reana-yadage.yaml&name=reana-demo-worldpopulation-yadage)
 
-If you would like a step-by-step guide on how to use the REANA command-line client to
-launch this analysis example, please read on.
+If you would like a step-by-step guide on how to use the REANA command-line
+client to launch this analysis example, please read on.
 
-We start by creating a [reana.yaml](reana.yaml) file describing the above analysis
-structure with its inputs, code, runtime environment, computational workflow steps and
-expected outputs:
+We start by creating a [reana.yaml](reana.yaml) file describing the above
+analysis structure with its inputs, code, runtime environment, computational
+workflow steps and expected outputs:
 
 ```yaml
 version: 0.3.0
@@ -154,22 +159,25 @@ workflow:
   type: serial
   specification:
     steps:
-      - environment: 'docker.io/reanahub/reana-env-jupyter:3.0.0'
+      - environment: "docker.io/reanahub/reana-env-jupyter:3.0.0"
         commands:
-          - mkdir -p results && papermill ${notebook} /dev/null -p input_file ${input_file} -p output_file ${output_file} -p region ${region} -p year_min ${year_min} -p year_max ${year_max}
+          - mkdir -p results && papermill ${notebook} /dev/null -p input_file
+            ${input_file} -p output_file ${output_file} -p region ${region} -p
+            year_min ${year_min} -p year_max ${year_max}
 outputs:
   files:
     - results/plot.png
 ```
 
-In this example we are using a simple Serial workflow engine to represent our sequential
-computational workflow steps. Note that we can also use the CWL workflow specification
-(see [reana-cwl.yaml](reana-cwl.yaml)), the Yadage workflow specification (see
-[reana-yadage.yaml](reana-yadage.yaml)) or the Snakemake workflow specification (see
+In this example we are using a simple Serial workflow engine to represent our
+sequential computational workflow steps. Note that we can also use the CWL
+workflow specification (see [reana-cwl.yaml](reana-cwl.yaml)), the Yadage
+workflow specification (see [reana-yadage.yaml](reana-yadage.yaml)) or the
+Snakemake workflow specification (see
 [reana-snakemake.yaml](reana-snakemake.yaml))).
 
-We can now install the REANA command-line client, run the analysis and download the
-resulting plots:
+We can now install the REANA command-line client, run the analysis and download
+the resulting plots:
 
 ```console
 $ # create new virtual environment
@@ -195,5 +203,6 @@ $ # download output results
 $ reana-client download
 ```
 
-Please see the [REANA-Client](https://reana-client.readthedocs.io/) documentation for
-more detailed explanation of typical `reana-client` usage scenarios.
+Please see the [REANA-Client](https://reana-client.readthedocs.io/)
+documentation for more detailed explanation of typical `reana-client` usage
+scenarios.
