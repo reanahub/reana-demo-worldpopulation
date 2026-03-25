@@ -21,7 +21,11 @@ lint_commitlint() {
     from=${2:-master}
     to=${3:-HEAD}
     pr=${4:-[0-9]+}
-    npx commitlint --from="$from" --to="$to"
+    if command -v commitlint >/dev/null 2>&1; then
+        commitlint --from="$from" --to="$to"
+    else
+        npx commitlint --from="$from" --to="$to"
+    fi
     found=0
     while IFS= read -r line; do
         commit_hash=$(echo "$line" | cut -d ' ' -f 1)
